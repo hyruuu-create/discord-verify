@@ -96,7 +96,7 @@ p {
 
 <body>
   <div class="card">
-    <img class="logo" src="https://cdn.discordapp.com/attachments/1469870137166266398/1484135829449478174/Screenshot_2026-01-10_220600.png">
+    <img class="logo" src="https://imgur.com/a/VesDLhH">
     
     <h1>🎭 Figuran Verification</h1>
     <p>
@@ -215,7 +215,7 @@ p {
 
 <body>
   <div class="card">
-    <img class="logo" src="https://cdn.discordapp.com/attachments/1469870137166266398/1484135829449478174/Screenshot_2026-01-10_220600.png">
+    <img class="logo" src="https://imgur.com/a/VesDLhH">
 
     <div class="check">🎉</div>
     <h1>Selamat Datang!</h1>
