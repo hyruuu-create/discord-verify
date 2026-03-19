@@ -22,7 +22,7 @@ const app = express()
 
 const CLIENT_ID = process.env.CLIENT_ID
 const CLIENT_SECRET = process.env.CLIENT_SECRET
-const REDIRECT_URI = 'https://discord-verify-production-0c19.up.railway.app/callback'
+const REDIRECT_URI = 'https://discord-verify-production-2866.up.railway.app/callback'
 
 const BOT_TOKEN = process.env.BOT_TOKEN
 const GUILD_ID = process.env.GUILD_ID
