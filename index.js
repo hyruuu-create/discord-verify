@@ -29,6 +29,7 @@ const GUILD_ID = process.env.GUILD_ID
 const ROLE_ID = process.env.ROLE_ID
 
 // HOME
+app.use(express.static('public'))
 app.get('/', (req, res) => {
   const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify%20guilds.join`
 
@@ -96,7 +97,7 @@ p {
 
 <body>
   <div class="card">
-    <img class="logo" src="https://cdn.discordapp.com/attachments/1470011473081143477/1484184835214934026/Screenshot_2026-01-10_220600.png">
+    <img class="logo" src="/logo.png">
     
     <h1>🎭 Figuran Verification</h1>
     <p>
@@ -215,7 +216,7 @@ p {
 
 <body>
   <div class="card">
-    <img class="logo" src="https://cdn.discordapp.com/attachments/1470011473081143477/1484184835214934026/Screenshot_2026-01-10_220600.png">
+    <img class="logo" src="/logo.png">
     <div class="check">🎉</div>
     <h1>Selamat Datang!</h1>
     <p>
