@@ -113,6 +113,9 @@ const axios = require('axios')
 
 const app = express()
 
+// 🔍 DEBUG TOKEN (NANTI HAPUS SETELAH BERES)
+console.log("TOKEN:", process.env.BOT_TOKEN)
+
 // CONFIG
 const CLIENT_ID = process.env.CLIENT_ID
 const CLIENT_SECRET = process.env.CLIENT_SECRET
@@ -122,11 +125,11 @@ const BOT_TOKEN = process.env.BOT_TOKEN
 const GUILD_ID = process.env.GUILD_ID
 const ROLE_ID = process.env.ROLE_ID
 
-// ROUTE HOME (TOMBOL VERIFY)
+// ROUTE HOME
 app.get('/', (req, res) => {
   const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify%20guilds.join`
-  
- res.send(`
+
+  res.send(`
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -151,7 +154,11 @@ app.get('/', (req, res) => {
       text-align: center;
       backdrop-filter: blur(10px);
       box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      <img src=https://cdn.discordapp.com/attachments/1469870137166266398/1484135829449478174/Screenshot_2026-01-10_220600.png?ex=69bd20b3&is=69bbcf33&hm=8e3ebe2b00edf2815ad31ef198a2b703af852e5d00c00d3e817e8e5176abf691& width="80">
+    }
+
+    img {
+      width: 80px;
+      margin-bottom: 15px;
     }
 
     h1 {
@@ -183,6 +190,7 @@ app.get('/', (req, res) => {
 <body>
 
   <div class="card">
+    <img src="https://cdn.discordapp.com/attachments/1469870137166266398/1484135829449478174/Screenshot_2026-01-10_220600.png" />
     <h1>🔐 Server FiGu Verification</h1>
     <p>Silakan login dengan Discord untuk mendapatkan akses</p>
     
@@ -196,14 +204,13 @@ app.get('/', (req, res) => {
 `)
 })
 
-// CALLBACK DARI DISCORD
+// CALLBACK
 app.get('/callback', async (req, res) => {
   const code = req.query.code
-
   if (!code) return res.send('Code tidak ditemukan!')
 
   try {
-    // 1. TUKAR CODE JADI TOKEN
+    // 1. Tukar code → token
     const tokenRes = await axios.post(
       'https://discord.com/api/oauth2/token',
       new URLSearchParams({
@@ -222,7 +229,7 @@ app.get('/callback', async (req, res) => {
 
     const access_token = tokenRes.data.access_token
 
-    // 2. AMBIL DATA USER
+    // 2. Ambil user
     const userRes = await axios.get(
       'https://discord.com/api/users/@me',
       {
@@ -234,12 +241,10 @@ app.get('/callback', async (req, res) => {
 
     const user = userRes.data
 
-    // 3. MASUKKAN USER KE SERVER
+    // 3. Join ke server
     await axios.put(
       `https://discord.com/api/guilds/${GUILD_ID}/members/${user.id}`,
-      {
-        access_token: access_token
-      },
+      { access_token },
       {
         headers: {
           Authorization: `Bot ${BOT_TOKEN}`,
@@ -248,7 +253,7 @@ app.get('/callback', async (req, res) => {
       }
     )
 
-    // 4. KASIH ROLE
+    // 4. Kasih role
     await axios.put(
       `https://discord.com/api/guilds/${GUILD_ID}/members/${user.id}/roles/${ROLE_ID}`,
       {},
@@ -266,64 +271,27 @@ app.get('/callback', async (req, res) => {
 <head>
   <meta charset="UTF-8">
   <title>Success</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #1e1e2f, #2c2c54);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.08);
-      padding: 40px;
-      border-radius: 15px;
-      text-align: center;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    }
-
-    h1 {
-      color: #57f287;
-      margin-bottom: 10px;
-    }
-
-    p {
-      color: #ccc;
-    }
-
-    .check {
-      font-size: 50px;
-      margin-bottom: 15px;
-    }
-  </style>
 </head>
-<body>
-
-  <div class="card">
-    <div class="check">✅</div>
+<body style="display:flex;justify-content:center;align-items:center;height:100vh;background:#1e1e2f;color:white;font-family:Arial">
+  <div style="text-align:center">
+    <div style="font-size:50px">✅</div>
     <h1>Berhasil Verifikasi</h1>
     <p>Halo <b>${user.username}</b>, kamu sudah mendapatkan role!</p>
   </div>
-
 </body>
 </html>
 `)
   } catch (err) {
-    console.error(err.response?.data || err.message)
+    console.error("ERROR:", err.response?.data || err.message)
 
     res.send(`
       <h2>❌ Error</h2>
-      <p>Gagal verifikasi. Cek console server.</p>
+      <p>Gagal verifikasi. Cek log Railway.</p>
     `)
   }
 })
 
-// RUN SERVER
+// RUN
 app.listen(process.env.PORT || 3000, '0.0.0.0', () => {
-  console.log('Server Jalan Di https://discord-verify-production-0c19.up.railway.app')
+  console.log('Server Jalan')
 })
