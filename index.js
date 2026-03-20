@@ -61,6 +61,33 @@ client.on('messageCreate', async (message) => {
     const random = responses[Math.floor(Math.random() * responses.length)];
 
     await message.reply({ content: random });
+
+    if (text.includes('gabut')) {
+
+  console.log("GABUT TRIGGER:", message.id);
+
+  const responses = [
+    `😴 ${message.author} gabut ya? sini ngobrol sama aku`,
+    `🎮 ${message.author} gabut? main game sana 😆`,
+    `📱 ${message.author} scroll tiktok mulu ya kamu`,
+    `👀 ${message.author} gabut tapi ga tau mau ngapain`,
+    `😏 ${message.author} gabut = nunggu dia chat ya`,
+    `🔥 ${message.author} gabut mending aktif di server dong`,
+    `🎧 ${message.author} gabut? denger lagu aja`,
+    `💬 ${message.author} chat orang dong jangan diem aja`,
+    `😆 ${message.author} gabut banget sampe ngomong di sini`,
+    `🫠 ${message.author} gabut kronis ini`,
+    `📢 ${message.author} gabut? ramein chat dong`,
+    `😜 ${message.author} gabut tapi males gerak`,
+    `💡 ${message.author} gabut? coba cari kesibukan`,
+    `🧠 ${message.author} mikir keras padahal cuma gabut`,
+    `🤣 ${message.author} gabut level max`
+  ];
+
+  const random = responses[Math.floor(Math.random() * responses.length)];
+
+  await message.reply({ content: random });
+}
   }
 });
 
