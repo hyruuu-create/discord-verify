@@ -62,7 +62,7 @@ client.on('messageCreate', async (message) => {
 
     await message.reply({ content: random });
 
-    if (text.includes('gabut')) {
+  if (text.includes('gabut')) {
 
   console.log("GABUT TRIGGER:", message.id);
 
