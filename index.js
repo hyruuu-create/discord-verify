@@ -33,36 +33,35 @@ client.on('messageCreate', async (message) => {
     handledMessages.delete(message.id);
   }, 10000);
 
-  const text = message.content.toLowerCase();
+ const text = message.content.toLowerCase();
 
-  if (text.includes('kangen')) {
+if (text.includes('kangen')) {
 
-    console.log("TRIGGER:", message.id); // ✅ pindahin ke sini
+  console.log("TRIGGER:", message.id);
 
-    const responses = [
-      `💭 ${message.author}, kangen siapa tuh? 👀`,
-      `😏 ciee ${message.author} lagi kangen ya`,
-      `💔 ${message.author}... dia juga kangen ga ya?`,
-      `🥀 ${message.author}, kadang kangen ga harus memiliki...`,
-      `🌙 ${message.author}, kangen itu datang tiba-tiba ya`,
-      `📱 ${message.author} chat aja dia, siapa tau dibalas 😆`,
-      `👀 ${message.author} lagi mikirin dia terus ya`,
-      `🔥 ${message.author} fix ga bisa move on nih`,
-      `💌 ${message.author} mungkin dia juga lagi kangen kamu`,
-      `😶‍🌫️ ${message.author} pura-pura kuat padahal kangen`,
-      `🫣 ${message.author} jangan dipendem terus dong kangennya`,
-      `🎧 ${message.author} denger lagu galau lagi ya?`,
-      `💫 ${message.author} kangen itu tanda masih peduli`,
-      `🥺 ${message.author} sini cerita aja kalau lagi kangen`,
-      `😜 ${message.author} kangen atau cuma gabut nih`,
-      `😐 ${message.author} Udah tau punya pacar masih hubungin mantan`
-    ];
+  const responses = [
+    `💭 ${message.author}, kangen siapa tuh? 👀`,
+    `😏 ciee ${message.author} lagi kangen ya`,
+    `💔 ${message.author}... dia juga kangen ga ya?`,
+    `🥀 ${message.author}, kadang kangen ga harus memiliki...`,
+    `🌙 ${message.author}, kangen itu datang tiba-tiba ya`,
+    `📱 ${message.author} chat aja dia, siapa tau dibalas 😆`,
+    `👀 ${message.author} lagi mikirin dia terus ya`,
+    `🔥 ${message.author} fix ga bisa move on nih`,
+    `💌 ${message.author} mungkin dia juga lagi kangen kamu`,
+    `😶‍🌫️ ${message.author} pura-pura kuat padahal kangen`,
+    `🫣 ${message.author} jangan dipendem terus dong kangennya`,
+    `🎧 ${message.author} denger lagu galau lagi ya?`,
+    `💫 ${message.author} kangen itu tanda masih peduli`,
+    `🥺 ${message.author} sini cerita aja kalau lagi kangen`,
+    `😜 ${message.author} kangen atau cuma gabut nih`,
+    `😐 ${message.author} udah tau punya pacar masih hubungin mantan`
+  ];
 
-    const random = responses[Math.floor(Math.random() * responses.length)];
+  const random = responses[Math.floor(Math.random() * responses.length)];
+  await message.reply({ content: random });
 
-    await message.reply({ content: random });
-
-  if (text.includes('gabut')) {
+} else if (text.includes('gabut')) {
 
   console.log("GABUT TRIGGER:", message.id);
 
@@ -81,15 +80,15 @@ client.on('messageCreate', async (message) => {
     `😜 ${message.author} gabut tapi males gerak`,
     `💡 ${message.author} gabut? coba cari kesibukan`,
     `🧠 ${message.author} mikir keras padahal cuma gabut`,
-    `🤣 ${message.author} gabut level max`
+    `🤣 ${message.author} gabut level max`,
+    `😎 ${message.author} gabut? sini aku temenin`,
+    `🧃 ${message.author} gabut sambil ngopi santai aja`,
+    `🎲 ${message.author} gabut? ayo cari kegiatan seru`
   ];
 
   const random = responses[Math.floor(Math.random() * responses.length)];
-
   await message.reply({ content: random });
 }
-  }
-});
 
 // LOGIN BOT
 client.login(process.env.BOT_TOKEN)
