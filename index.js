@@ -5,15 +5,45 @@ const { Client, GatewayIntentBits } = require('discord.js')
 
 // ================== DISCORD BOT ==================
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds]
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent
+  ]
 })
 
-client.once('ready', () => {
+process.on('unhandledRejection', console.error)
+process.on('uncaughtException', console.error)
+
+// ✅ READY
+client.once('clientReady', () => {
   console.log(`🤖 Bot aktif: ${client.user.tag}`)
 })
 
-// 🔥 LOGIN BOT (PAKAI INI!)
-console.log("BOT TOKEN:", process.env.BOT_TOKEN)
+// 🔥 RESPON KANGEN
+client.on('messageCreate', async (message) => {
+  if (message.author.bot) return
+
+  const text = message.content.toLowerCase()
+
+  if (text.includes('kangen')) {
+    const responses = [
+      `💭 ${message.author}, kangen siapa tuh? 👀`,
+      `😏 ciee ${message.author} lagi kangen ya`,
+      `💔 ${message.author}... dia juga kangen ga ya?`,
+      `📱 ${message.author} chat aja sana 😌`,
+      `🌙 kangen itu berat ya ${message.author}...`,
+      `👀 jujur aja ${message.author}, kangen siapa?`,
+      `🔥 ${message.author} fix lagi mikirin dia nih`,
+      `🥀 ${message.author}, kadang kangen ga harus memiliki...`
+    ]
+
+    const random = responses[Math.floor(Math.random() * responses.length)]
+    await message.reply({ content: random })
+  }
+})
+
+// LOGIN BOT (SATU KALI AJA!)
 client.login(process.env.BOT_TOKEN)
 
 
@@ -28,100 +58,19 @@ const BOT_TOKEN = process.env.BOT_TOKEN
 const GUILD_ID = process.env.GUILD_ID
 const ROLE_ID = process.env.ROLE_ID
 
-// HOME
 app.use(express.static('public'))
+
 app.get('/', (req, res) => {
   const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify%20guilds.join`
 
-  res.send(`
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<title>Figuran Verification</title>
-<style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #1a1a2e, #16213e);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  color: white;
-}
-
-.card {
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(15px);
-  padding: 40px;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 0 40px rgba(0,0,0,0.6);
-  max-width: 400px;
-}
-
-.logo {
-  width: 150px;
-  margin-bottom: 20px;
-}
-
-h1 {
-  margin-bottom: 10px;
-  font-size: 24px;
-}
-
-p {
-  color: #ccc;
-  font-size: 14px;
-  margin-bottom: 25px;
-}
-
-.btn {
-  background: linear-gradient(45deg, #ff7b00, #ff3c00);
-  border: none;
-  padding: 14px 28px;
-  color: white;
-  font-size: 15px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px #ff5e00;
-}
-</style>
-</head>
-
-<body>
-  <div class="card">
-    <img class="logo" src="/logo.png">
-    
-    <h1>🎭 Figuran Verification</h1>
-    <p>
-      Selamat datang di panggung kami.<br>
-      Saatnya kamu memasuki <b>area tenang para Figuran</b> ✨<br><br>
-      Klik tombol di bawah untuk memulai perjalananmu.
-    </p>
-
-    <a href="${url}">
-      <button class="btn">Masuk & Verifikasi</button>
-    </a>
-  </div>
-</body>
-</html>
-`)
+  res.send(`<h1>Login</h1><a href="${url}">Verifikasi</a>`)
 })
 
-// CALLBACK
 app.get('/callback', async (req, res) => {
   const code = req.query.code
   if (!code) return res.send('Code tidak ditemukan!')
 
   try {
-    // Tukar code → token
     const tokenRes = await axios.post(
       'https://discord.com/api/oauth2/token',
       new URLSearchParams({
@@ -136,7 +85,6 @@ app.get('/callback', async (req, res) => {
 
     const access_token = tokenRes.data.access_token
 
-    // Ambil user
     const userRes = await axios.get(
       'https://discord.com/api/users/@me',
       { headers: { Authorization: `Bearer ${access_token}` } }
@@ -144,7 +92,6 @@ app.get('/callback', async (req, res) => {
 
     const user = userRes.data
 
-    // Join server
     await axios.put(
       `https://discord.com/api/guilds/${GUILD_ID}/members/${user.id}`,
       { access_token },
@@ -156,7 +103,6 @@ app.get('/callback', async (req, res) => {
       }
     )
 
-    // Kasih role
     await axios.put(
       `https://discord.com/api/guilds/${GUILD_ID}/members/${user.id}/roles/${ROLE_ID}`,
       {},
@@ -167,121 +113,14 @@ app.get('/callback', async (req, res) => {
       }
     )
 
-  res.send(`
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<title>Berhasil</title>
-<style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #0f172a, #1e293b);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  color: white;
-}
-
-.card {
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(15px);
-  padding: 40px;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 0 40px rgba(0,0,0,0.6);
-}
-
-.logo {
-  width: 120px;
-  margin-bottom: 20px;
-}
-
-.check {
-  font-size: 50px;
-  margin-bottom: 10px;
-}
-
-h1 {
-  color: #4ade80;
-}
-
-p {
-  color: #ccc;
-}
-</style>
-</head>
-
-<body>
-  <div class="card">
-    <img class="logo" src="/logo.png">
-    <div class="check">🎉</div>
-    <h1>Selamat Datang!</h1>
-    <p>
-      Halo <b>${user.username}</b>,<br><br>
-      Kamu resmi menjadi bagian dari<br>
-      <b>panggung Figuran</b> 🎭<br><br>
-      Nikmati suasana, bangun cerita,<br>
-      dan jadilah bagian dari perjalanan ini ✨
-    </p>
-  </div>
-</body>
-</html>
-`)
+    res.send(`<h1>✅ Berhasil, ${user.username}</h1>`)
 
   } catch (err) {
     console.error("ERROR:", err.response?.data || err.message)
-    res.send(`<h1>❌ Error, cek log Railway</h1>`)
+    res.send(`<h1>❌ Error</h1>`)
   }
 })
 
-// RUN
 app.listen(process.env.PORT || 3000, '0.0.0.0', () => {
   console.log('🌐 Web jalan')
 })
-
-// =================================================================================
-const { Client, GatewayIntentBits } = require('discord.js');
-
-const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent
-  ]
-});
-
-process.on('unhandledRejection', console.error);
-process.on('uncaughtException', console.error);
-
-// ✅ pakai clientReady (biar ga warning)
-client.once('clientReady', () => {
-  console.log(`✨ Bot aktif sebagai ${client.user.tag}`);
-});
-
-client.on('messageCreate', async (message) => {
-  if (message.author.bot) return;
-
-  const text = message.content.toLowerCase();
-
-  if (text.includes('kangen')) {
-
-    const responses = [
-      `💭 ${message.author}, kangen siapa tuh? 👀`,
-      `😏 ciee ${message.author} lagi kangen ya`,
-      `💔 ${message.author}... dia juga kangen ga ya?`,
-      `📱 ${message.author} chat aja sana 😌`,
-      `🌙 kangen itu berat ya ${message.author}...`,
-      `👀 jujur aja ${message.author}, kangen siapa?`,
-      `🔥 ${message.author} fix lagi mikirin dia nih`,
-      `🥀 ${message.author}, kadang kangen ga harus memiliki...`
-    ];
-
-    const random = responses[Math.floor(Math.random() * responses.length)];
-    await message.reply({ content: random });
-  }
-});
-
-client.login(process.env.BOT_TOKEN);
