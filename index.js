@@ -108,7 +108,11 @@ const ROLE_ID = process.env.ROLE_ID
 
 // HOME
 app.use(express.static('public'))
-res.send(`
+
+app.get('/', (req, res) => {
+  const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify%20guilds.join`
+
+  res.send(`
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -119,12 +123,7 @@ res.send(`
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
 body {
   height: 100vh;
@@ -135,22 +134,22 @@ body {
   overflow: hidden;
 }
 
-/* background blur circle */
-.bg {
+.bg, .bg2 {
   position: absolute;
+  filter: blur(120px);
+}
+
+.bg {
   width: 500px;
   height: 500px;
   background: radial-gradient(circle, #ff7b00, transparent);
-  filter: blur(120px);
   animation: float 8s ease-in-out infinite;
 }
 
 .bg2 {
-  position: absolute;
   width: 400px;
   height: 400px;
   background: radial-gradient(circle, #3b82f6, transparent);
-  filter: blur(120px);
   animation: float 10s ease-in-out infinite;
 }
 
@@ -159,7 +158,6 @@ body {
   50% { transform: translateY(-40px); }
 }
 
-/* card */
 .card {
   position: relative;
   z-index: 10;
@@ -179,29 +177,21 @@ body {
   border-radius: 15px;
 }
 
-h1 {
-  font-size: 22px;
-  margin-bottom: 10px;
-  color: #fff;
-}
+h1 { color: white; margin-bottom: 10px; }
 
 p {
-  font-size: 14px;
   color: #cbd5f5;
+  font-size: 14px;
   margin-bottom: 25px;
-  line-height: 1.5;
 }
 
-/* button */
 .btn {
   background: linear-gradient(45deg, #ff7b00, #ff3c00);
   border: none;
-  padding: 14px 25px;
+  padding: 14px;
   border-radius: 12px;
   color: white;
-  font-size: 15px;
   cursor: pointer;
-  transition: 0.3s;
   width: 100%;
 }
 
@@ -210,7 +200,6 @@ p {
   box-shadow: 0 0 20px #ff5e00;
 }
 
-/* footer */
 .footer {
   margin-top: 20px;
   font-size: 12px;
@@ -231,7 +220,7 @@ p {
 
   <p>
     Selamat datang di panggung kami ✨<br>
-    Masuk ke <b>area eksklusif Figuran</b> dan mulai perjalananmu.
+    Masuk ke <b>area eksklusif Figuran</b>
   </p>
 
   <a href="${url}">
@@ -239,13 +228,14 @@ p {
   </a>
 
   <div class="footer">
-    Powered by Figuran System
+    Powered by Figuran
   </div>
 </div>
 
 </body>
 </html>
 `)
+})
 // CALLBACK
 app.get('/callback', async (req, res) => {
   const code = req.query.code
