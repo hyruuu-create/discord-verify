@@ -284,7 +284,132 @@ app.get('/callback', async (req, res) => {
       }
     )
 
-    res.send(`<h1>🎉 Berhasil!</h1><p>Halo <b>${user.username}</b></p>`)
+    res.send(`
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verification Success</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  overflow: hidden;
+}
+
+/* glow background */
+.bg {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #22c55e, transparent);
+  filter: blur(120px);
+  animation: float 8s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0px); }
+  50% { transform: translateY(-30px); }
+}
+
+/* card */
+.card {
+  position: relative;
+  z-index: 10;
+  backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.05);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  width: 350px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* icon */
+.check {
+  font-size: 50px;
+  margin-bottom: 15px;
+  animation: pop 0.5s ease;
+}
+
+@keyframes pop {
+  0% { transform: scale(0); }
+  100% { transform: scale(1); }
+}
+
+h1 {
+  color: #22c55e;
+  margin-bottom: 10px;
+}
+
+p {
+  color: #cbd5f5;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.btn {
+  background: linear-gradient(45deg, #22c55e, #16a34a);
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  width: 100%;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #22c55e;
+}
+
+.footer {
+  margin-top: 15px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<div class="card">
+  <div class="check">✅</div>
+
+  <h1>Berhasil Verifikasi!</h1>
+
+  <p>
+    Halo <b>${user.username}</b> 🎭<br>
+    Kamu sudah resmi masuk ke <b>Figuran</b> ✨
+  </p>
+
+  <button class="btn" onclick="window.close()">Tutup Halaman</button>
+
+  <div class="footer">
+    Selamat datang di server 🚀
+  </div>
+</div>
+
+</body>
+</html>
+`)
 
   } catch (err) {
     console.error("ERROR:", err.response?.data || err.message)
