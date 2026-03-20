@@ -43,6 +43,28 @@ client.on('messageCreate', async (message) => {
   }
 })
 
+client.on('messageCreate', async (message) => {
+  if (message.author.bot) return;
+
+  // ❗ cegah double respon
+  if (message._responded) return;
+  message._responded = true;
+
+  const text = message.content.toLowerCase();
+
+  if (text.includes('kangen')) {
+    const responses = [
+      `💭 ${message.author}, kangen siapa tuh? 👀`,
+      `😏 ciee ${message.author} lagi kangen ya`,
+      `💔 ${message.author}... dia juga kangen ga ya?`,
+      `🥀 ${message.author}, kadang kangen ga harus memiliki...`
+    ];
+
+    const random = responses[Math.floor(Math.random() * responses.length)];
+    await message.reply({ content: random });
+  }
+});
+
 // LOGIN BOT (SATU KALI)
 client.login(process.env.BOT_TOKEN)
 
