@@ -21,27 +21,6 @@ client.once('clientReady', () => {
 })
 
 // 🔥 RESPON KANGEN
-client.on('messageCreate', async (message) => {
-  if (message.author.bot) return
-
-  const text = message.content.toLowerCase()
-
-  if (text.includes('kangen')) {
-    const responses = [
-      `💭 ${message.author}, kangen siapa tuh? 👀`,
-      `😏 ciee ${message.author} lagi kangen ya`,
-      `💔 ${message.author}... dia juga kangen ga ya?`,
-      `📱 ${message.author} chat aja sana, jangan dipendem 😌`,
-      `🌙 kangen itu berat ya ${message.author}...`,
-      `👀 jujur aja ${message.author}, kangen siapa?`,
-      `🔥 ${message.author} fix lagi mikirin dia nih`,
-      `🥀 ${message.author}, kadang kangen ga harus memiliki...`
-    ]
-
-    const random = responses[Math.floor(Math.random() * responses.length)]
-    await message.reply({ content: random })
-  }
-})
 
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
