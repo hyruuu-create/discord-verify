@@ -54,7 +54,8 @@ client.on('messageCreate', async (message) => {
       `🎧 ${message.author} denger lagu galau lagi ya?`,
       `💫 ${message.author} kangen itu tanda masih peduli`,
       `🥺 ${message.author} sini cerita aja kalau lagi kangen`,
-      `😜 ${message.author} kangen atau cuma gabut nih`
+      `😜 ${message.author} kangen atau cuma gabut nih`,
+      `😐 ${message.author} Udah tau punya pacar masih hubungin mantan`
     ];
 
     const random = responses[Math.floor(Math.random() * responses.length)];
