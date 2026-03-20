@@ -89,8 +89,9 @@ if (text.includes('kangen')) {
   const random = responses[Math.floor(Math.random() * responses.length)];
   await message.reply({ content: random });
 }
+});
 
-// LOGIN BOT
+// ✅ LOGIN DI LUAR (FIX ERROR)
 client.login(process.env.BOT_TOKEN)
 
 
