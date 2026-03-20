@@ -26,7 +26,6 @@ const handledMessages = new Set();
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
 
-  // ❗ FIX HARD: cegah double / multi trigger
   if (handledMessages.has(message.id)) return;
   handledMessages.add(message.id);
 
@@ -36,14 +35,26 @@ client.on('messageCreate', async (message) => {
 
   const text = message.content.toLowerCase();
 
-  // ❗ hanya trigger 1x
   if (text.includes('kangen')) {
+
+    console.log("TRIGGER:", message.id); // ✅ pindahin ke sini
 
     const responses = [
       `💭 ${message.author}, kangen siapa tuh? 👀`,
       `😏 ciee ${message.author} lagi kangen ya`,
       `💔 ${message.author}... dia juga kangen ga ya?`,
-      `🥀 ${message.author}, kadang kangen ga harus memiliki...`
+      `🥀 ${message.author}, kadang kangen ga harus memiliki...`,
+      `🌙 ${message.author}, kangen itu datang tiba-tiba ya`,
+      `📱 ${message.author} chat aja dia, siapa tau dibalas 😆`,
+      `👀 ${message.author} lagi mikirin dia terus ya`,
+      `🔥 ${message.author} fix ga bisa move on nih`,
+      `💌 ${message.author} mungkin dia juga lagi kangen kamu`,
+      `😶‍🌫️ ${message.author} pura-pura kuat padahal kangen`,
+      `🫣 ${message.author} jangan dipendem terus dong kangennya`,
+      `🎧 ${message.author} denger lagu galau lagi ya?`,
+      `💫 ${message.author} kangen itu tanda masih peduli`,
+      `🥺 ${message.author} sini cerita aja kalau lagi kangen`,
+      `😜 ${message.author} kangen atau cuma gabut nih`
     ];
 
     const random = responses[Math.floor(Math.random() * responses.length)];
@@ -51,9 +62,8 @@ client.on('messageCreate', async (message) => {
     await message.reply({ content: random });
   }
 });
-console.log("TRIGGER:", message.id);
 
-// LOGIN BOT (SATU KALI)
+// LOGIN BOT
 client.login(process.env.BOT_TOKEN)
 
 
@@ -79,77 +89,12 @@ app.get('/', (req, res) => {
 <head>
 <meta charset="UTF-8">
 <title>Figuran Verification</title>
-<style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #1a1a2e, #16213e);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  color: white;
-}
-
-.card {
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(15px);
-  padding: 40px;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 0 40px rgba(0,0,0,0.6);
-  max-width: 400px;
-}
-
-.logo {
-  width: 150px;
-  margin-bottom: 20px;
-}
-
-h1 {
-  margin-bottom: 10px;
-  font-size: 24px;
-}
-
-p {
-  color: #ccc;
-  font-size: 14px;
-  margin-bottom: 25px;
-}
-
-.btn {
-  background: linear-gradient(45deg, #ff7b00, #ff3c00);
-  border: none;
-  padding: 14px 28px;
-  color: white;
-  font-size: 15px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px #ff5e00;
-}
-</style>
 </head>
-
 <body>
-  <div class="card">
-    <img class="logo" src="/logo.png">
-    
-    <h1>🎭 Figuran Verification</h1>
-    <p>
-      Selamat datang di panggung kami.<br>
-      Saatnya kamu memasuki <b>area tenang para Figuran</b> ✨<br><br>
-      Klik tombol di bawah untuk memulai perjalananmu.
-    </p>
-
-    <a href="${url}">
-      <button class="btn">Masuk & Verifikasi</button>
-    </a>
-  </div>
+  <h1>🎭 Figuran Verification</h1>
+  <a href="${url}">
+    <button>Masuk & Verifikasi</button>
+  </a>
 </body>
 </html>
 `)
@@ -182,7 +127,6 @@ app.get('/callback', async (req, res) => {
 
     const user = userRes.data
 
-    // join server
     await axios.put(
       `https://discord.com/api/guilds/${GUILD_ID}/members/${user.id}`,
       { access_token },
@@ -194,7 +138,6 @@ app.get('/callback', async (req, res) => {
       }
     )
 
-    // kasih role
     await axios.put(
       `https://discord.com/api/guilds/${GUILD_ID}/members/${user.id}/roles/${ROLE_ID}`,
       {},
@@ -205,14 +148,11 @@ app.get('/callback', async (req, res) => {
       }
     )
 
-    res.send(`
-<h1>🎉 Berhasil!</h1>
-<p>Halo <b>${user.username}</b>, kamu sudah terverifikasi 🎭</p>
-`)
+    res.send(`<h1>🎉 Berhasil!</h1><p>Halo <b>${user.username}</b></p>`)
 
   } catch (err) {
     console.error("ERROR:", err.response?.data || err.message)
-    res.send(`<h1>❌ Error, cek Railway</h1>`)
+    res.send(`<h1>❌ Error</h1>`)
   }
 })
 
