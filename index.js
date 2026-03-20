@@ -21,17 +21,24 @@ client.once('clientReady', () => {
 })
 
 // 🔥 RESPON KANGEN
+const handledMessages = new Set();
 
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
 
-  // ❗ cegah double respon
-  if (message._responded) return;
-  message._responded = true;
+  // ❗ FIX HARD: cegah double / multi trigger
+  if (handledMessages.has(message.id)) return;
+  handledMessages.add(message.id);
+
+  setTimeout(() => {
+    handledMessages.delete(message.id);
+  }, 10000);
 
   const text = message.content.toLowerCase();
 
+  // ❗ hanya trigger 1x
   if (text.includes('kangen')) {
+
     const responses = [
       `💭 ${message.author}, kangen siapa tuh? 👀`,
       `😏 ciee ${message.author} lagi kangen ya`,
@@ -40,9 +47,11 @@ client.on('messageCreate', async (message) => {
     ];
 
     const random = responses[Math.floor(Math.random() * responses.length)];
+
     await message.reply({ content: random });
   }
 });
+console.log("TRIGGER:", message.id);
 
 // LOGIN BOT (SATU KALI)
 client.login(process.env.BOT_TOKEN)
