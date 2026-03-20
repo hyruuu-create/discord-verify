@@ -241,3 +241,55 @@ p {
 app.listen(process.env.PORT || 3000, '0.0.0.0', () => {
   console.log('🌐 Web jalan')
 })
+
+// =================================================================================
+const { Client, GatewayIntentBits } = require('discord.js');
+
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent
+  ]
+});
+
+// biar ga mati kalau error
+process.on('unhandledRejection', console.error);
+process.on('uncaughtException', console.error);
+
+client.once('ready', () => {
+  console.log(`✨ Bot aktif sebagai ${client.user.tag}`);
+});
+
+client.on('messageCreate', async (message) => {
+  if (message.author.bot) return;
+
+  const text = message.content.toLowerCase();
+
+  // ===============================
+  // 💔 RESPON KANGEN (AESTHETIC)
+  // ===============================
+  if (text.includes('kangen')) {
+
+    const responses = [
+      `💭 ${message.author}, kangen siapa tuh? 👀`,
+      `😏 ciee ${message.author} lagi kangen ya`,
+      `💔 ${message.author}... dia juga kangen ga ya?`,
+      `📱 ${message.author} chat aja sana, jangan dipendem 😌`,
+      `🌙 kangen itu berat ya ${message.author}...`,
+      `👀 jujur aja ${message.author}, kangen siapa?`,
+      `🔥 ${message.author} fix lagi mikirin dia nih`,
+      `🥀 ${message.author}, kadang kangen ga harus memiliki...`,
+      `😶‍🌫️ ${message.author} lagi overthinking ya?`,
+      `🖤 kangen itu sederhana, yang ribet itu ${message.author}`
+    ];
+
+    const random = responses[Math.floor(Math.random() * responses.length)];
+
+    await message.reply({
+      content: random
+    });
+  }
+});
+
+client.login(process.env.BOT_TOKEN);
