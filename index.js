@@ -108,26 +108,144 @@ const ROLE_ID = process.env.ROLE_ID
 
 // HOME
 app.use(express.static('public'))
-app.get('/', (req, res) => {
-  const url = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=identify%20guilds.join`
-
-  res.send(`
+res.send(`
 <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Figuran Verification</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  overflow: hidden;
+}
+
+/* background blur circle */
+.bg {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #ff7b00, transparent);
+  filter: blur(120px);
+  animation: float 8s ease-in-out infinite;
+}
+
+.bg2 {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #3b82f6, transparent);
+  filter: blur(120px);
+  animation: float 10s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0px); }
+  50% { transform: translateY(-40px); }
+}
+
+/* card */
+.card {
+  position: relative;
+  z-index: 10;
+  backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.05);
+  border-radius: 20px;
+  padding: 40px;
+  text-align: center;
+  width: 350px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.logo {
+  width: 90px;
+  margin-bottom: 20px;
+  border-radius: 15px;
+}
+
+h1 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+p {
+  font-size: 14px;
+  color: #cbd5f5;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+/* button */
+.btn {
+  background: linear-gradient(45deg, #ff7b00, #ff3c00);
+  border: none;
+  padding: 14px 25px;
+  border-radius: 12px;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+  width: 100%;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #ff5e00;
+}
+
+/* footer */
+.footer {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+</style>
 </head>
+
 <body>
+
+<div class="bg"></div>
+<div class="bg2"></div>
+
+<div class="card">
+  <img class="logo" src="/logo.png">
+
   <h1>🎭 Figuran Verification</h1>
+
+  <p>
+    Selamat datang di panggung kami ✨<br>
+    Masuk ke <b>area eksklusif Figuran</b> dan mulai perjalananmu.
+  </p>
+
   <a href="${url}">
-    <button>Masuk & Verifikasi</button>
+    <button class="btn">🚀 Verifikasi Sekarang</button>
   </a>
+
+  <div class="footer">
+    Powered by Figuran System
+  </div>
+</div>
+
 </body>
 </html>
 `)
-})
-
 // CALLBACK
 app.get('/callback', async (req, res) => {
   const code = req.query.code
