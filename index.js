@@ -253,11 +253,11 @@ const client = new Client({
   ]
 });
 
-// biar ga mati kalau error
 process.on('unhandledRejection', console.error);
 process.on('uncaughtException', console.error);
 
-client.once('ready', () => {
+// ✅ pakai clientReady (biar ga warning)
+client.once('clientReady', () => {
   console.log(`✨ Bot aktif sebagai ${client.user.tag}`);
 });
 
@@ -266,29 +266,21 @@ client.on('messageCreate', async (message) => {
 
   const text = message.content.toLowerCase();
 
-  // ===============================
-  // 💔 RESPON KANGEN (AESTHETIC)
-  // ===============================
   if (text.includes('kangen')) {
 
     const responses = [
       `💭 ${message.author}, kangen siapa tuh? 👀`,
       `😏 ciee ${message.author} lagi kangen ya`,
       `💔 ${message.author}... dia juga kangen ga ya?`,
-      `📱 ${message.author} chat aja sana, jangan dipendem 😌`,
+      `📱 ${message.author} chat aja sana 😌`,
       `🌙 kangen itu berat ya ${message.author}...`,
       `👀 jujur aja ${message.author}, kangen siapa?`,
       `🔥 ${message.author} fix lagi mikirin dia nih`,
-      `🥀 ${message.author}, kadang kangen ga harus memiliki...`,
-      `😶‍🌫️ ${message.author} lagi overthinking ya?`,
-      `🖤 kangen itu sederhana, yang ribet itu ${message.author}`
+      `🥀 ${message.author}, kadang kangen ga harus memiliki...`
     ];
 
     const random = responses[Math.floor(Math.random() * responses.length)];
-
-    await message.reply({
-      content: random
-    });
+    await message.reply({ content: random });
   }
 });
 
