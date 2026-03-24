@@ -97,7 +97,7 @@ client.login(process.env.BOT_TOKEN)
 
 // ================== WEB VERIFY ==================
 const app = express()
-
+const fs = require("fs")
 const CLIENT_ID = process.env.CLIENT_ID
 const CLIENT_SECRET = process.env.CLIENT_SECRET
 const REDIRECT_URI = 'https://discord-verify-production-2866.up.railway.app/callback'
@@ -228,7 +228,7 @@ p {
   </a>
 
   <div class="footer">
-    Powered by Figuran
+    Powered by Hyruu
   </div>
 </div>
 
@@ -262,6 +262,23 @@ app.get('/callback', async (req, res) => {
     )
 
     const user = userRes.data
+    
+    // ================== SIMPAN DATA USER ==================
+let data = []
+if (fs.existsSync("users.json")) {
+  data = JSON.parse(fs.readFileSync("users.json"))
+}
+
+// biar tidak double
+if (!data.find(u => u.id === user.id)) {
+  data.push({
+    id: user.id,
+    username: user.username
+  })
+}
+
+fs.writeFileSync("users.json", JSON.stringify(data, null, 2))
+// =====================================================
 
     await axios.put(
       `https://discord.com/api/guilds/${GUILD_ID}/members/${user.id}`,
@@ -421,3 +438,12 @@ p {
 app.listen(process.env.PORT || 3000, '0.0.0.0', () => {
   console.log('🌐 Web jalan')
 })
+
+// ================== LIHAT DATA VERIFY ==================
+app.get("/data", (req, res) => {
+  if (!fs.existsSync("users.json")) return res.json([])
+
+  const data = JSON.parse(fs.readFileSync("users.json"))
+  res.json(data)
+})
+// =====================================================
