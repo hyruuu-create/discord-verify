@@ -417,7 +417,9 @@ p {
     Kamu sudah resmi masuk ke <b>Figuran</b> ✨
   </p>
 
-  <button class="btn" onclick="window.close()">Tutup Halaman</button>
+<button class="btn" onclick="window.location.href='https://www.google.com'">
+  Tutup Halaman
+</button>
 
   <div class="footer">
     Selamat datang di server 🚀
